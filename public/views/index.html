@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="../css/style.css" rel="stylesheet">
+    <title>Активы</title>
+</head>
+<body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="../js/main.js" type="text/javascript"></script>
+<header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+        <svg class="bi me-2" width="40" height="32">
+            <use xlink:href="#bootstrap"></use>
+        </svg>
+        <span class="fs-4">РИТ</span>
+    </a>
+</header>
+
+<main>
+    <div class="container">
+        <button id="createBtn" class="btn btn-success mb-1 formBtn" data-bs-toggle="modal" data-bs-target="#modalForm">
+            Добавить актив
+        </button>
+        <div class="modal fade modal-sheet p-4 py-md-5" tabindex="-1" role="dialog" id="modalForm">
+            <div class="modal-dialog">
+                <div class="modal-content rounded-4 shadow">
+                    <div class="modal-header p-5 pb-4 border-bottom-0">
+                        <h1 id="modalTitle" class="fw-bold mb-0 fs-2">Данные об активе</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body p-5 pt-0">
+                        <form id="activeForm" class="" method="post" action="actives/create">
+                            <input type="hidden" id="activeId">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control rounded-3" name="name" id="floatingName"
+                                       placeholder="Название">
+                                <label for="floatingName">Название</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <select class="form-control form-select rounded-3" id="floatingType">
+                                    <option selected disabled>Выберите тип...</option>
+                                    <option value="money">Денежный</option>
+                                    <option value="other">Иной</option>
+                                </select>
+                                <label for="floatingType">Тип актива</label>
+                            </div>
+                            <div class="form-floating mb-3 hiddenMoneyInput">
+                                <input type="text" class="form-control rounded-3" name="totalCost"
+                                       id="floatingTotalCost" placeholder="Стоимость">
+                                <label for="floatingTotalCost">Стоимость</label>
+                            </div>
+
+                            <hr class="my-4 hiddenMoneyInput">
+
+                            <div class="form-floating mb-3 hiddenMoneyInput">
+                                <input type="text" class="form-control rounded-3" name="bankName"
+                                       id="floatingBankName" placeholder="Банк">
+                                <label for="floatingBankName">Банк</label>
+                            </div>
+                            <div class="form-floating mb-3 hiddenMoneyInput">
+                                <input type="text" class="form-control rounded-3" name="accountNumber"
+                                       id="floatingAccountNumber" placeholder="Счет">
+                                <label for="floatingAccountNumber">Счет</label>
+                            </div>
+
+                            <p><small class="text-muted hiddenMoneyInput">Либо (если деньги не в банке)</small></p>
+
+                            <div class="form-floating mb-3 hiddenMoneyInput">
+                                <input type="text" class="form-control rounded-3" name="currency"
+                                       id="floatingCurrency" placeholder="Валюта">
+                                <label for="floatingCurrency">Валюта</label>
+                            </div>
+
+                            <div class="form-floating mb-3 hiddenNonMoneyInput">
+                                <input type="text" class="form-control rounded-3" name="startBalanceCost"
+                                       id="floatingStartBalanceCost" placeholder="Начальная бал. стоимость">
+                                <label for="floatingStartBalanceCost">Начальная бал. стоимость</label>
+                            </div>
+                            <div class="form-floating mb-3 hiddenNonMoneyInput">
+                                <input type="text" class="form-control rounded-3" name="residualBalanceCost"
+                                       id="floatingResidualBalanceCost" placeholder="Остаточная бал. стоимость">
+                                <label for="floatingResidualBalanceCost">Остаточная бал. стоимость</label>
+                            </div>
+                            <div class="form-floating mb-3 hiddenNonMoneyInput">
+                                <input type="text" class="form-control rounded-3" name="finalBalanceCost"
+                                       id="floatingFinalBalanceCost" placeholder="Оценочная бал. стоимость">
+                                <label for="floatingFinalBalanceCost">Оценочная бал. стоимость</label>
+                            </div>
+
+                            <hr class="my-4 hiddenNonMoneyInput">
+
+                            <div class="form-floating mb-3 hiddenNonMoneyInput">
+                                <input type="text" class="form-control rounded-3" name="inventoryNumber"
+                                       id="floatingInventoryNumber" placeholder="Оценочная бал. стоимость">
+                                <label for="floatingInventoryNumber">Инвентарный номер</label>
+                            </div>
+                            <div class="form-floating mb-3 hiddenNonMoneyInput">
+                                <input type="text" class="form-control rounded-3" name="measureUnits"
+                                       id="floatingMeasureUnits" placeholder="Оценочная бал. стоимость">
+                                <label for="floatingMeasureUnits">Единицы измерения</label>
+                            </div>
+                            <div class="form-floating mb-3 hiddenNonMoneyInput">
+                                <input type="text" class="form-control rounded-3" name="productionDate"
+                                       id="floatingProductionDate" placeholder="Оценочная бал. стоимость">
+                                <label for="floatingProductionDate">Дата производтства</label>
+                            </div>
+
+                            <button id="submitBtn" class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit">
+                                Сохранить
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <table class="table" id="actives-table">
+            <thead>
+            <tr>
+                <th>№</th>
+                <th>Название</th>
+                <th>Тип</th>
+                <th>Детали</th>
+                <th>Стоимость</th>
+                <th>Действия</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+</body>
+</html>

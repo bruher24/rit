@@ -16,7 +16,7 @@
         crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="../js/main.js" type="text/javascript"></script>
-<header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+<header id="header" class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
     <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
         <svg class="bi me-2" width="40" height="32">
             <use xlink:href="#bootstrap"></use>
@@ -39,7 +39,7 @@
                     </div>
 
                     <div class="modal-body p-5 pt-0">
-                        <form id="activeForm" class="" method="post" action="actives/create">
+                        <form id="activeForm">
                             <input type="hidden" id="activeId">
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control rounded-3" name="name" id="floatingName"
@@ -47,7 +47,7 @@
                                 <label for="floatingName">Название</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <select class="form-control form-select rounded-3" id="floatingType">
+                                <select class="form-control form-select rounded-3" id="floatingType" name="type">
                                     <option selected disabled>Выберите тип...</option>
                                     <option value="money">Денежный</option>
                                     <option value="other">Иной</option>
@@ -115,7 +115,7 @@
                                 <label for="floatingProductionDate">Дата производтства</label>
                             </div>
 
-                            <button id="submitBtn" class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit">
+                            <button id="submitBtn" class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="button">
                                 Сохранить
                             </button>
                         </form>

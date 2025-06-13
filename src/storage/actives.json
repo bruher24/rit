@@ -1,0 +1,45 @@
+[
+    {
+        "name": "Main Account",
+        "type": "money",
+        "totalCost": "123",
+        "bankName": "\u0421\u0431\u0435\u0440\u0431\u0430\u043d\u043a",
+        "accountNumber": "12345",
+        "id": "1"
+    },
+    {
+        "name": "322323",
+        "type": "money",
+        "totalCost": "2323",
+        "bankName": "2323",
+        "accountNumber": "2323",
+        "id": 3
+    },
+    {
+        "name": "3223",
+        "type": "money",
+        "totalCost": "3223",
+        "bankName": "2332",
+        "accountNumber": "2332",
+        "id": 4
+    },
+    {
+        "name": "666",
+        "type": "money",
+        "totalCost": "777",
+        "bankName": "888",
+        "accountNumber": "999",
+        "id": 7
+    },
+    {
+        "name": "123123123",
+        "type": "other",
+        "startBalanceCost": "1",
+        "residualBalanceCost": "2",
+        "finalBalanceCost": "3",
+        "inventoryNumber": "erer",
+        "measureUnits": "ttt",
+        "productionDate": "2222",
+        "id": 8
+    }
+]

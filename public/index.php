@@ -33,10 +33,8 @@ $app->get('/',function ($request, $response, array $args){
     return $response;
 })->setName('index');
 $app->get('/actives', ActiveController::class . ':index')->setName('actives.index');
-$app->get('/actives/create',ActiveController::class . ":create")->setName('actives.createForm');
 $app->post('/actives/create',ActiveController::class . ":create")->setName('actives.create');
-$app->get('/actives/{id}/update',ActiveController::class . ":updateForm")->setName('actives.updateForm');
-$app->put('/actives/{id}/update',ActiveController::class . ":update")->setName('actives.update');
+$app->post('/actives/{id}/update',ActiveController::class . ":update")->setName('actives.update');
 $app->delete('/actives/{id}/delete',ActiveController::class . ":delete")->setName('actives.delete');
 
 $app->run();

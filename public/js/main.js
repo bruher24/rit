@@ -9,7 +9,10 @@ $(document).ready(function () {
                 'id',
                 'name',
                 'type',
-                'totalCost'
+                'totalCost',
+                'startBalanceCost',
+                'residualBalanceCost',
+                'finalBalanceCost',
             ];
             for (let key of Object.keys(active)) {
                 if (avoidKeys.indexOf(key) < 0) {
@@ -19,12 +22,13 @@ $(document).ready(function () {
             }
             detailsString = detailsString.slice(0, -2);
             detailsString = detailsString[0].toUpperCase() + detailsString.slice(1);
+            let cost = formatCost(active);
             let tr = "<tr>" +
                 `<td>${active.id}</td>` +
                 `<td>${active.name}</td>` +
                 `<td>${active.type === 'money' ? 'Денежный' : 'Иной'}</td>` +
                 `<td>${detailsString}</td>` +
-                `<td>${active.totalCost}</td>` +
+                `<td>${cost}</td>` +
                 `<td>
                     <button class="btn btn-sm btn-warning formBtn" id='updateBtn' data-active='${active.id}''>
                         Изменить
@@ -64,13 +68,16 @@ $(document).ready(function () {
         $('#floatingType').on('change', function () {
             moneySelector.hide();
             nonMoneySelector.hide();
+
             let activeId = $('#activeId').val();
             let active = actives.find(a => a.id == activeId);
             if (active) {
                 if (active.type === this.value) {
                     fillForm(active);
                 } else {
+                    let temp = this.value;
                     $('#activeForm')[0].reset();
+                    this.value = temp;
                 }
             }
             if (this.value === 'money') {
@@ -81,9 +88,27 @@ $(document).ready(function () {
         });
 
         $('#submitBtn').click(function () {
-            let data = $('#activeForm').serializeArray();
-            console.log(data);
-            if(data.)
+            var data = $('#activeForm').serializeArray().reduce(function (obj, item) {
+                obj[item.name] = item.value;
+                return obj;
+            }, {});
+
+            let formattedData = formatData(data);
+
+            let method = 'create';
+            let activeId = $('#activeId').val();
+            if (activeId) {
+                formattedData.id = activeId;
+                method = 'update';
+            }
+
+            sendData(formattedData, method).then((response) => {
+                if (response.errors) {
+                    displayErrors(response.errors);
+                    return;
+                }
+                window.location.replace('/');
+            });
         });
     });
 });
@@ -99,6 +124,7 @@ async function getActivesRequest() {
 function fillForm(active) {
     $('#floatingName').val(active.name);
     $('#floatingType').val(active.type);
+
     let selector = active.type === 'money' ? '.hiddenMoneyInput' : 'hiddenNonMoneyInput';
     let inputs = $(selector).children('.form-control');
 
@@ -123,4 +149,60 @@ function formatDetail(key, value) {
         case 'productionDate':
             return `дата произв.: ${value}`;
     }
+}
+
+function formatData(data) {
+    let result = {};
+    result.name = data.name;
+    result.type = data.type;
+
+    let selector = data.type === 'money' ? '.hiddenMoneyInput' : '.hiddenNonMoneyInput';
+    let inputs = $(selector).children('.form-control');
+
+    inputs.each(function () {
+        let property = this.name;
+        result[property] = data[property].trim();
+    })
+
+    if (result.bankName) {
+        delete result.currency;
+    }
+
+    return result;
+}
+
+async function sendData(data, type) {
+    let url = 'actives/create';
+    if (type === 'update') {
+        url = `actives/${data.id}/update`;
+    }
+    return await $.ajax({
+        url: url,
+        method: 'post',
+        async: true,
+        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        data: data
+    });
+}
+
+function displayErrors(errors) {
+    let header = $('#header');
+    for (const field of Object.keys(errors)) {
+        errors[field].forEach((error) => {
+            let alert = "<div class='alert alert-danger alert-dismissible fade show errorAlert' role='alert' style='z-index: 999999;'>" +
+                `<p>${error}</p>` +
+                "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>" +
+                "</div>";
+            header.append(alert);
+        });
+    }
+}
+
+function formatCost(active) {
+    if (active.totalCost) {
+        return active.totalCost;
+    }
+    return `Нач.: ${active.startBalanceCost}` + "<br>"
+        + `Ост.: ${active.residualBalanceCost}` + "<br>"
+        + `Оцен.: ${active.finalBalanceCost}`;
 }

@@ -5,22 +5,15 @@ namespace App\Models\Active\MoneyActive;
 class BankMoneyActive extends MoneyActive
 {
     public function __construct(
-        int $id,
-        string $name,
-        float $totalCost,
+        int              $id,
+        string           $name,
+        string           $type,
+        float            $totalCost,
         protected string $bankName,
         protected string $accountNumber
-    ) {
-        parent::__construct($id, $name, $totalCost);
+    )
+    {
+        parent::__construct($id, $name, $type, $totalCost);
     }
 
-//    public function getBankName(): string
-//    {
-//        return $this->bankName;
-//    }
-//
-//    public function getAccountNumber(): string
-//    {
-//        return $this->accountNumber;
-//    }
 }

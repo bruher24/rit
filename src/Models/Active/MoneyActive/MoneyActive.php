@@ -9,16 +9,14 @@ class MoneyActive extends Active
 
 
     public function __construct(
-        int $id,
-        string $name,
+        int             $id,
+        string          $name,
+        string          $type,
         protected float $totalCost
-    ) {
-        parent::__construct($id, $name);
+    )
+    {
+        parent::__construct($id, $name, $type);
         $this->type = 'money';
     }
 
-//    public function getTotalCost(): float
-//    {
-//        return $this->totalCost;
-//    }
 }

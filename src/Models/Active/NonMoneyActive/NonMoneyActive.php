@@ -6,7 +6,16 @@ use App\Models\Active\Active;
 
 class NonMoneyActive extends Active
 {
-    private float $startBalanceCost;
-    private float $residualBalanceCost;
-    private float $finalBalanceCost;
+
+    public function __construct(
+        int             $id,
+        string          $name,
+        string          $type,
+        protected float $startBalanceCost,
+        protected float $residualBalanceCost,
+        protected float $finalBalanceCost
+    )
+    {
+        parent::__construct($id, $name, $type);
+    }
 }

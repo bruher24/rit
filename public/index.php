@@ -22,9 +22,7 @@ $container->set('ActiveController', function () use ($container) {
     return new ActiveController($container);
 });
 
-$app->add(TwigMiddleware::create($app, $container->get('view')));
-
-$app->get('/',function ($request, $response, array $args){
+$app->get('/', function ($request, $response, array $args) {
     $file = 'views/index.html';
     if (!file_exists($file)) {
         return $response->withStatus(404);
@@ -33,8 +31,8 @@ $app->get('/',function ($request, $response, array $args){
     return $response;
 })->setName('index');
 $app->get('/actives', ActiveController::class . ':index')->setName('actives.index');
-$app->post('/actives/create',ActiveController::class . ":create")->setName('actives.create');
-$app->post('/actives/{id}/update',ActiveController::class . ":update")->setName('actives.update');
-$app->delete('/actives/{id}/delete',ActiveController::class . ":delete")->setName('actives.delete');
+$app->post('/actives/create', ActiveController::class . ":create")->setName('actives.create');
+$app->post('/actives/{id:\d+}/update', ActiveController::class . ":update")->setName('actives.update');
+$app->delete('/actives/{id:\d+}/delete', ActiveController::class . ":delete")->setName('actives.delete');
 
 $app->run();

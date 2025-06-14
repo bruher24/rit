@@ -30,11 +30,11 @@ $(document).ready(function () {
                 `<td>${detailsString}</td>` +
                 `<td>${cost}</td>` +
                 `<td>
-                    <button class="btn btn-sm btn-warning formBtn" id='updateBtn' data-active='${active.id}''>
+                    <button type='button' class='btn btn-sm btn-warning formBtn updateBtn' data-active='${active.id}'>
                         Изменить
                     </button>
-                    <form action="/actives/${active.id}/delete" method="post" style="display:inline;">
-                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Вы уверены, что хотите удалить этот актив?')">Удалить</button>
+                    <form style='display:inline;'>
+                        <button type='button' class='btn btn-sm btn-danger deleteBtn' data-active='${active.id}'>Удалить</button>
                     </form>
                 </td>` +
                 "</tr>";
@@ -56,13 +56,23 @@ $(document).ready(function () {
             $('#activeId').val('');
         });
 
-        $('#updateBtn').click(function () {
+        $('.updateBtn').click(function () {
             let activeId = $(this).data('active');
             let active = actives.find(a => a.id == activeId);
             $('#modalTitle').html(`Изменение актива №${activeId}`);
             $('#activeId').val(activeId);
             $('#floatingType').val(active.type).change();
             modal.show();
+        });
+
+        $('.deleteBtn').click(function () {
+            let confirmed = confirm('Вы уверены, что хотите удалить этот актив?');
+            if (confirmed) {
+                let activeId = $(this).data('active');
+                sendData({id: activeId}, 'delete').then((response) => {
+                    processResponse(response);
+                });
+            }
         });
 
         $('#floatingType').on('change', function () {
@@ -75,9 +85,10 @@ $(document).ready(function () {
                 if (active.type === this.value) {
                     fillForm(active);
                 } else {
-                    let temp = this.value;
+                    let type = this.value;
                     $('#activeForm')[0].reset();
-                    this.value = temp;
+                    this.value = type;
+                    $('#floatingName').val(active.name);
                 }
             }
             if (this.value === 'money') {
@@ -103,11 +114,7 @@ $(document).ready(function () {
             }
 
             sendData(formattedData, method).then((response) => {
-                if (response.errors) {
-                    displayErrors(response.errors);
-                    return;
-                }
-                window.location.replace('/');
+                processResponse(response);
             });
         });
     });
@@ -173,12 +180,17 @@ function formatData(data) {
 
 async function sendData(data, type) {
     let url = 'actives/create';
+    let method = 'post';
     if (type === 'update') {
         url = `actives/${data.id}/update`;
     }
+    if (type === 'delete') {
+        url = `actives/${data.id}/delete`;
+        method = 'delete';
+    }
     return await $.ajax({
         url: url,
-        method: 'post',
+        method: method,
         async: true,
         contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
         data: data
@@ -205,4 +217,13 @@ function formatCost(active) {
     return `Нач.: ${active.startBalanceCost}` + "<br>"
         + `Ост.: ${active.residualBalanceCost}` + "<br>"
         + `Оцен.: ${active.finalBalanceCost}`;
+}
+
+
+function processResponse(response) {
+    if (response.status === 'success') {
+        window.location.replace('/');
+        return;
+    }
+    displayErrors(response.errors);
 }

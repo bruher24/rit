@@ -83,7 +83,7 @@ class Validator
                 if (method_exists($this, $method)) {
                     if ($rule === 'or' || $rule === 'unique') {
                         $check = $this->$method($field, $value, $ruleValue, $data);
-                    }else {
+                    } else {
                         $check = $this->$method($field, $value, $ruleValue);
                     }
                     if (!$check) {

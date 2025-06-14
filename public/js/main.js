@@ -3,7 +3,8 @@ $(document).ready(function () {
     let actives = [];
     getActivesRequest().then((response) => {
         actives = response;
-        actives.forEach((active) => {
+        for (const key in actives) {
+            const active = actives[key];
             let detailsString = '';
             let avoidKeys = [
                 'id',
@@ -20,14 +21,16 @@ $(document).ready(function () {
                     detailsString += detail + ', ';
                 }
             }
-            detailsString = detailsString.slice(0, -2);
-            detailsString = detailsString[0].toUpperCase() + detailsString.slice(1);
+            if (detailsString) {
+                detailsString = detailsString.slice(0, -2);
+                detailsString = detailsString[0].toUpperCase() + detailsString.slice(1);
+            }
             let cost = formatCost(active);
             let tr = "<tr>" +
                 `<td>${active.id}</td>` +
                 `<td>${active.name}</td>` +
                 `<td>${active.type === 'money' ? 'Денежный' : 'Иной'}</td>` +
-                `<td>${detailsString}</td>` +
+                `<td>${detailsString ?? ''}</td>` +
                 `<td>${cost}</td>` +
                 `<td>
                     <button type='button' class='btn btn-sm btn-warning formBtn updateBtn' data-active='${active.id}'>
@@ -39,7 +42,7 @@ $(document).ready(function () {
                 </td>` +
                 "</tr>";
             table.append(tr);
-        });
+        }
 
         const modal = new bootstrap.Modal('#modalForm');
         const moneySelector = $('.hiddenMoneyInput');

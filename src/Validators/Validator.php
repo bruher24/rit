@@ -53,16 +53,19 @@ class Validator
             'min' => 0.1,
         ],
         'inventoryNumber' => [
+            'required' => false,
             'string' => true,
             'min' => 3,
             'max' => 50,
         ],
         'measureUnits' => [
+            'required' => false,
             'string' => true,
             'min' => 3,
             'max' => 50,
         ],
         'productionDate' => [
+            'required' => false,
             'string' => true,
             'min' => 4,
             'max' => 50,
@@ -83,8 +86,14 @@ class Validator
                 if (method_exists($this, $method)) {
                     if ($rule === 'or' || $rule === 'unique') {
                         $check = $this->$method($field, $value, $ruleValue, $data);
+                        if ($rule === 'or') {
+                            break;
+                        }
                     } else {
                         $check = $this->$method($field, $value, $ruleValue);
+                        if ($rule === 'required') {
+                            break;
+                        }
                     }
                     if (!$check) {
                         break;

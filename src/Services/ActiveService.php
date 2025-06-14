@@ -64,11 +64,13 @@ final class ActiveService
             if ($data['bankName']) {
                 return new BankMoneyActive(...$data);
             }
+            unset($data['bankName'], $data['accountNumber']);
             return new NonBankMoneyActive(...$data);
         }
         if ($data['inventoryNumber'] || $data['measureUnits'] || $data['productionDate']) {
             return new CountableNonMoneyActive(...$data);
         }
+        unset($data['inventoryNumber'], $data['measureUnits'], $data['productionDate']);
         return new NonMoneyActive(...$data);
     }
 

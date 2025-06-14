@@ -3,8 +3,7 @@ $(document).ready(function () {
     let actives = [];
     getActivesRequest().then((response) => {
         actives = response;
-        for (const key in actives) {
-            const active = actives[key];
+        actives.forEach((active) => {
             let detailsString = '';
             let avoidKeys = [
                 'id',
@@ -42,7 +41,7 @@ $(document).ready(function () {
                 </td>` +
                 "</tr>";
             table.append(tr);
-        }
+        });
 
         const modal = new bootstrap.Modal('#modalForm');
         const moneySelector = $('.hiddenMoneyInput');
@@ -85,12 +84,14 @@ $(document).ready(function () {
             let activeId = $('#activeId').val();
             let active = actives.find(a => a.id == activeId);
             if (active) {
-                if (active.type === this.value) {
+                console.log($(this).val())
+                console.log(active.type)
+                if (active.type === $(this).val()) {
                     fillForm(active);
                 } else {
-                    let type = this.value;
+                    let type = $(this).val();
                     $('#activeForm')[0].reset();
-                    this.value = type;
+                    $(this).val(type);
                     $('#floatingName').val(active.name);
                 }
             }
@@ -135,7 +136,7 @@ function fillForm(active) {
     $('#floatingName').val(active.name);
     $('#floatingType').val(active.type);
 
-    let selector = active.type === 'money' ? '.hiddenMoneyInput' : 'hiddenNonMoneyInput';
+    let selector = active.type === 'money' ? '.hiddenMoneyInput' : '.hiddenNonMoneyInput';
     let inputs = $(selector).children('.form-control');
 
     inputs.each(function () {

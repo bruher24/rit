@@ -21,7 +21,8 @@ final class ActiveService
 
     public function getActives(): array
     {
-        return $this->actives;
+        $actives = $this->loadActives();
+        return array_values($actives);
     }
 
     public function storeActive(array $data): bool
@@ -85,6 +86,7 @@ final class ActiveService
 
     private function saveActives(): void
     {
+        $this->actives = array_values($this->actives);
         file_put_contents($this->storageFile, json_encode($this->actives, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
     }
 
